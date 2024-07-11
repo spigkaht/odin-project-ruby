@@ -1,21 +1,22 @@
 require_relative "game"
 
-def new_game
+def new_game()
   puts "Load a previous game? (y/n)"
   print "> "
   choice = gets.chomp
+
   if choice == "y"
-    puts "boooo yaaaa"
     loaded = true
+    current_game = load_game
   else
     loaded = false
-    lines = File.readlines("./google-10000-english-no-swears")
+    lines = File.readlines("google-10000-english-no-swears.txt")
     current_game = Game.new
     until current_game.word.length <=13 && current_game.word.length >= 6 do
       current_game.word = lines.sample
     end
-    run_game(current_game, loaded)
   end
+  run_game(current_game, loaded)
 end
 
 def run_game(current_game, loaded)
@@ -47,7 +48,7 @@ def run_game(current_game, loaded)
     else
       puts "Incorrect!"
       current_game.incorrect_guesses << input
-      current_game.counter_down
+      current_game.count_down
     end
 
     puts "Your incorrect guesses: #{current_game.incorrect_guesses}"
@@ -63,10 +64,20 @@ def run_game(current_game, loaded)
   end
 
   puts current_game.winner ? "Correct, you are the winner!" : "You lose!"
+  puts "The word was #{original_word.join}"
+
+  puts "Play again? (y/n)"
+  print "> "
+  repeat_game = gets.chomp
+  new_game if repeat_game == "y"
 end
 
 def save_game(game)
   File.write("save.txt", game)
+end
+
+def load_game
+  File.read("save.txt")
 end
 
 new_game

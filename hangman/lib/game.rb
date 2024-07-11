@@ -10,6 +10,6 @@ class Game
   end
 
   def count_down
-    counter - 1
+    @counter -= 1
   end
 end
