@@ -1,4 +1,5 @@
 require_relative "game"
+require "json"
 
 def new_game()
   puts "Load a previous game? (y/n)"
@@ -22,12 +23,12 @@ end
 def run_game(current_game, loaded)
   if !loaded
     current_game.letters = current_game.word.tr("\n", "").split("")
-    original_word = current_game.letters.map(&:itself)
-    guess = current_game.letters.map { |letter| letter = "_" }
+    current_game.original_word = current_game.letters.map(&:itself)
+    current_game.guess = current_game.letters.map { |letter| letter = "_" }
   end
 
   while current_game.winner == false && current_game.counter.positive? do
-    puts guess.join(" ")
+    puts current_game.guess.join(" ")
 
     puts "Enter 0 to save your game and exit OR"
     puts "Enter a letter (a-z) or type out your whole word guess"
@@ -38,7 +39,7 @@ def run_game(current_game, loaded)
       save_game(current_game)
       puts "goodbye!"
       return
-    elsif input.length > 1 && input == original_word.join
+    elsif input.length > 1 && input == current_game.original_word.join
       current_game.winner = true
       break
     elsif input.length > 1 || input.count("0-9") > 0
@@ -56,15 +57,15 @@ def run_game(current_game, loaded)
 
     while current_game.letters.include? input do
       index = current_game.letters.index(input)
-      guess[index] = current_game.letters[index]
+      current_game.guess[index] = current_game.letters[index]
       current_game.letters[index] = ""
     end
 
-    current_game.winner = true if current_game.letters.all? { |letter| letter == "" } || original_word == guess
+    current_game.winner = true if current_game.letters.all? { |letter| letter == "" } || current_game.original_word == current_game.guess
   end
 
   puts current_game.winner ? "Correct, you are the winner!" : "You lose!"
-  puts "The word was #{original_word.join}"
+  puts "The word was #{current_game.original_word.join}"
 
   puts "Play again? (y/n)"
   print "> "
@@ -73,11 +74,19 @@ def run_game(current_game, loaded)
 end
 
 def save_game(game)
-  File.write("save.txt", game)
+  File.open("save.txt", "w+") do |f|
+    Marshal.dump(game, f)
+  end
 end
 
 def load_game
-  File.read("save.txt")
+  if File.exist?("save.txt")
+    File.open("save.txt") do |f|
+      Marshal.load(f)
+    end
+  else
+    puts "No save game found"
+  end
 end
 
 new_game

@@ -1,5 +1,5 @@
 class Game
-  attr_accessor :letters, :incorrect_guesses, :word, :counter, :winner
+  attr_accessor :letters, :incorrect_guesses, :word, :counter, :winner, :guess, :original_word
 
   def initialize
     @letters = []
@@ -7,6 +7,8 @@ class Game
     @word = ""
     @counter = 8
     @winner = false
+    @guess = []
+    @original_word = []
   end
 
   def count_down

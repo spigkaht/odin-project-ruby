@@ -1,1 +1,5 @@
-#<Game:0x000075042735fca0>
+o:	Game:@letters[I"m:ETI"e;TI"e;TI"t;TI"i;TI"n;TI"g;TI"s;T:@incorrect_guesses[I"a;TI"a;TI"a;T:
+@wordI"meetings
+;T:@counteri
+:@winnerF:@guess[I"_;TI"_;TI"_;TI"_;TI"_;TI"_;TI"_;TI"_;T:@original_word[@@@	@
+@@@@
