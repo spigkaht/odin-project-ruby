@@ -7,3 +7,4 @@ class Calculator
     args.inject(:*)
   end
 end
+
